@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Sample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="kingghidorah" translatesAutoresizingMaskIntoConstraints="NO" id="6Tt-pr-5Wi">
+                                <rect key="frame" x="54" y="131" width="126" height="85"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="godzilla" translatesAutoresizingMaskIntoConstraints="NO" id="Nve-Ns-maV">
+                                <rect key="frame" x="233" y="156" width="73" height="107"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u6B-4Y-k51" userLabel="Undo Button">
+                                <rect key="frame" x="95" y="46" width="75" height="36"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="u6B-4Y-k51" secondAttribute="height" multiplier="25:12" id="2lh-9L-T40"/>
+                                    <constraint firstAttribute="width" constant="75" id="hXd-PX-L4h"/>
+                                </constraints>
+                                <state key="normal" title="Undo">
+                                    <color key="titleColor" red="0.93330742799999999" green="0.93330742799999999" blue="0.93330742799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="undoButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lrY-uN-BEh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="del-aT-shV" userLabel="Redo Button">
+                                <rect key="frame" x="201" y="46" width="75" height="36"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="del-aT-shV" secondAttribute="height" multiplier="25:12" id="CLX-Wj-drv"/>
+                                    <constraint firstAttribute="width" constant="75" id="tqa-fY-eiV"/>
+                                </constraints>
+                                <state key="normal" title="Redo">
+                                    <color key="titleColor" red="0.93330742799999999" green="0.93330742799999999" blue="0.93330742799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="reduButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hwt-eh-j7M"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dbn-VU-zVZ">
+                                <rect key="frame" x="218" y="92" width="136" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <string key="text">Drag images and
+do undo/redo.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.64659685860000005" green="0.64659685860000005" blue="0.64659685860000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="u6B-4Y-k51" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="79" id="BY7-eA-9od"/>
+                            <constraint firstItem="u6B-4Y-k51" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="26" id="KyU-vB-Tvw"/>
+                            <constraint firstItem="del-aT-shV" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="26" id="Tvi-LV-vZc"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="del-aT-shV" secondAttribute="trailing" constant="83" id="bYV-4x-gYU"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="godzillaImageView" destination="Nve-Ns-maV" id="Z4o-ea-di4"/>
+                        <outlet property="kingghidorahImageView" destination="6Tt-pr-5Wi" id="cPv-GD-bYO"/>
+                        <outlet property="redoButton" destination="del-aT-shV" id="3nU-zQ-TXf"/>
+                        <outlet property="undoButton" destination="u6B-4Y-k51" id="piv-Zu-RDU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="godzilla" width="116" height="200"/>
+        <image name="kingghidorah" width="301" height="198"/>
+    </resources>
+</document>
