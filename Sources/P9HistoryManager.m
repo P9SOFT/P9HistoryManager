@@ -23,7 +23,7 @@
 
 @implementation P9HistoryManager
 
-- (id)init
+- (instancetype)init
 {
     if( (self = [super init]) != nil ) {
         if( (_historiesForKey = [NSMutableDictionary new]) == nil ) {
@@ -37,7 +37,7 @@
     return self;
 }
 
-+ (P9HistoryManager *)defaultManager
++ (P9HistoryManager *)defaultP9HistoryManager
 {
     static dispatch_once_t once;
     static P9HistoryManager *sharedInstance;
@@ -47,14 +47,14 @@
 
 - (NSUInteger)countOfAllStepsForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return 0;
     }
     
     NSUInteger count = 0;
     
     @synchronized(self) {
-        count = [[_historiesForKey objectForKey:key] count];
+        count = [_historiesForKey[key] count];
     }
     
     return count;
@@ -62,16 +62,16 @@
 
 - (NSUInteger)countOfPrevStepsForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return 0;
     }
     
     NSUInteger count = 0;
     
     @synchronized(self) {
-        NSNumber *indexNumber = [_stepIndexForKey objectForKey:key];
+        NSNumber *indexNumber = _stepIndexForKey[key];
         if( indexNumber != nil ) {
-            count = [indexNumber unsignedIntegerValue] + 1;
+            count = indexNumber.unsignedIntegerValue + 1;
         }
     }
     
@@ -80,17 +80,17 @@
 
 - (NSUInteger)countOfNextStepsForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return 0;
     }
     
     NSUInteger count = 0;
     
     @synchronized(self) {
-        if( (count = [[_historiesForKey objectForKey:key] count]) > 0 ) {
-            NSNumber *indexNumber = [_stepIndexForKey objectForKey:key];
+        if( (count = [_historiesForKey[key] count]) > 0 ) {
+            NSNumber *indexNumber = _stepIndexForKey[key];
             if( indexNumber != nil ) {
-                count -= ([indexNumber unsignedIntegerValue] + 1);
+                count -= (indexNumber.unsignedIntegerValue + 1);
             }
         }
     }
@@ -100,44 +100,44 @@
 
 - (BOOL)stepForKey:(NSString *)key stepName:(NSString *)stepName parameters:(NSDictionary *)parameters undoAction:(P9HistoryManagerAction)undoAction redoAction:(P9HistoryManagerAction)redoAction
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return NO;
     }
     NSMutableDictionary *stepNode = [NSMutableDictionary new];
     if( stepNode == nil ) {
         return NO;
     }
-    if( [stepName length] > 0 ) {
-        [stepNode setObject:stepName forKey:kStepNameKey];
+    if( stepName.length > 0 ) {
+        stepNode[kStepNameKey] = stepName;
     }
-    if( [parameters count] > 0 ) {
-        [stepNode setObject:parameters forKey:kParameterKey];
+    if( parameters.count > 0 ) {
+        stepNode[kParameterKey] = parameters;
     }
     if( undoAction != nil ) {
-        [stepNode setObject:undoAction forKey:kUndoActionKey];
+        stepNode[kUndoActionKey] = undoAction;
     }
     if( redoAction != nil ) {
-        [stepNode setObject:redoAction forKey:kRedoActionKey];
+        stepNode[kRedoActionKey] = redoAction;
     }
     
     @synchronized(self) {
-        NSMutableArray *queue = [_historiesForKey objectForKey:key];
+        NSMutableArray *queue = _historiesForKey[key];
         NSUInteger nextStepIndex;
         if( queue == nil ) {
             if( (queue = [NSMutableArray new]) == nil ) {
                 return NO;
             }
-            [_historiesForKey setObject:queue forKey:key];
+            _historiesForKey[key] = queue;
             nextStepIndex = 0;
         } else {
-            NSUInteger count = [[_historiesForKey objectForKey:key] count];
-            nextStepIndex = [[_stepIndexForKey objectForKey:key] unsignedIntegerValue] + 1;
+            NSUInteger count = [_historiesForKey[key] count];
+            nextStepIndex = [_stepIndexForKey[key] unsignedIntegerValue] + 1;
             if( nextStepIndex < count ) {
                 [queue removeObjectsInRange:NSMakeRange(nextStepIndex, count-nextStepIndex)];
             }
         }
         [queue addObject:stepNode];
-        [_stepIndexForKey setObject:@(nextStepIndex) forKey:key];
+        _stepIndexForKey[key] = @(nextStepIndex);
     }
     
     return YES;
@@ -145,75 +145,75 @@
 
 - (NSString *)peekPrevStepNameForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return nil;
     }
     
     NSMutableDictionary *prevStepNode = nil;
     @synchronized(self) {
-        NSNumber *stepIndexNumber = [_stepIndexForKey objectForKey:key];
+        NSNumber *stepIndexNumber = _stepIndexForKey[key];
         if( stepIndexNumber == nil ) {
             return nil;
         }
-        NSUInteger stepIndex = [stepIndexNumber unsignedIntegerValue];
+        NSUInteger stepIndex = stepIndexNumber.unsignedIntegerValue;
         if( stepIndex == 0 ) {
             return nil;
         }
-        NSMutableArray *queue = [_historiesForKey objectForKey:key];
-        prevStepNode = [queue objectAtIndex:stepIndex-1];
+        NSMutableArray *queue = _historiesForKey[key];
+        prevStepNode = queue[stepIndex-1];
     }
     
-    return [prevStepNode objectForKey:kStepNameKey];
+    return prevStepNode[kStepNameKey];
 }
 
 - (NSString *)peekNextStepNameForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return nil;
     }
     
     NSMutableDictionary *nextStepNode = nil;
     @synchronized(self) {
-        NSNumber *stepIndexNumber = [_stepIndexForKey objectForKey:key];
+        NSNumber *stepIndexNumber = _stepIndexForKey[key];
         if( stepIndexNumber == nil ) {
             return nil;
         }
-        NSMutableArray *queue = [_historiesForKey objectForKey:key];
-        NSUInteger stepIndex = [stepIndexNumber unsignedIntegerValue];
-        if( stepIndex >= ([queue count]-1) ) {
+        NSMutableArray *queue = _historiesForKey[key];
+        NSUInteger stepIndex = stepIndexNumber.unsignedIntegerValue;
+        if( stepIndex >= (queue.count-1) ) {
             return nil;
         }
-        nextStepNode = [queue objectAtIndex:stepIndex+1];
+        nextStepNode = queue[stepIndex+1];
     }
     
-    return [nextStepNode objectForKey:kStepNameKey];
+    return nextStepNode[kStepNameKey];
 }
 
 - (BOOL)undoStepForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return NO;
     }
     
     NSMutableDictionary *stepNode = nil;
     @synchronized(self) {
-        NSNumber *stepIndexNumber = [_stepIndexForKey objectForKey:key];
+        NSNumber *stepIndexNumber = _stepIndexForKey[key];
         if( stepIndexNumber == nil ) {
             return NO;
         }
-        NSMutableArray *queue = [_historiesForKey objectForKey:key];
-        NSUInteger stepIndex = [stepIndexNumber unsignedIntegerValue];
-        stepNode = [queue objectAtIndex:stepIndex];
+        NSMutableArray *queue = _historiesForKey[key];
+        NSUInteger stepIndex = stepIndexNumber.unsignedIntegerValue;
+        stepNode = queue[stepIndex];
         if( stepIndex == 0 ) {
             [_stepIndexForKey removeObjectForKey:key];
         } else {
-            [_stepIndexForKey setObject:@(stepIndex-1) forKey:key];
+            _stepIndexForKey[key] = @(stepIndex-1);
         }
     }
     
-    P9HistoryManagerAction action = [stepNode objectForKey:kUndoActionKey];
+    P9HistoryManagerAction action = stepNode[kUndoActionKey];
     if( action != nil ) {
-        action([stepNode objectForKey:kParameterKey]);
+        action(stepNode[kParameterKey]);
     }
     
     return YES;
@@ -221,33 +221,33 @@
 
 - (BOOL)redoStepForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return NO;
     }
     
     NSMutableDictionary *stepNode = nil;
     @synchronized(self) {
-        NSMutableArray *queue = [_historiesForKey objectForKey:key];
-        NSNumber *stepIndexNumber = [_stepIndexForKey objectForKey:key];
+        NSMutableArray *queue = _historiesForKey[key];
+        NSNumber *stepIndexNumber = _stepIndexForKey[key];
         NSUInteger stepIndex;
         if( stepIndexNumber == nil ) {
-            if( [queue count] == 0 ) {
+            if( queue.count == 0 ) {
                 return NO;
             }
             stepIndex = 0;
         } else {
-            stepIndex = [stepIndexNumber unsignedIntegerValue] + 1;
+            stepIndex = stepIndexNumber.unsignedIntegerValue + 1;
         }
-        if( stepIndex > ([queue count]-1) ) {
+        if( stepIndex > (queue.count-1) ) {
             return NO;
         }
-        stepNode = [queue objectAtIndex:stepIndex];
-        [_stepIndexForKey setObject:@(stepIndex) forKey:key];
+        stepNode = queue[stepIndex];
+        _stepIndexForKey[key] = @(stepIndex);
     }
     
-    P9HistoryManagerAction action = [stepNode objectForKey:kRedoActionKey];
+    P9HistoryManagerAction action = stepNode[kRedoActionKey];
     if( action != nil ) {
-        action([stepNode objectForKey:kParameterKey]);
+        action(stepNode[kParameterKey]);
     }
     
     return YES;
@@ -255,7 +255,7 @@
 
 - (void)clearAllStepsForKey:(NSString *)key
 {
-    if( [key length] == 0 ) {
+    if( key.length == 0 ) {
         return;
     }
     

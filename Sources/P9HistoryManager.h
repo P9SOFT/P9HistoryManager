@@ -13,7 +13,7 @@
  Block code definition to handling when undo/redo action.
  Parameter NSDictionary is given data when calling step.
  */
-typedef void(^P9HistoryManagerAction)(NSDictionary *);
+typedef void(^P9HistoryManagerAction)(NSDictionary * _Nullable);
 
 /*!
  P9HistoryManager
@@ -26,28 +26,28 @@ typedef void(^P9HistoryManagerAction)(NSDictionary *);
  Get shared default singleton module.
  @returns Return singleton P9HistoryManager object
  */
-+ (P9HistoryManager *)defaultManager;
++ (P9HistoryManager * _Nonnull)defaultP9HistoryManager;
 
 /*!
  Get count of all event nodes in history for given key.
  @param key History identifier string
  @returns Number of event nodes in history for given key.
  */
-- (NSUInteger)countOfAllStepsForKey:(NSString *)key;
+- (NSUInteger)countOfAllStepsForKey:(NSString * _Nullable)key;
 
 /*!
  Get count of previous event nodes at current step in history for given key.
  @param key History identifier string
  @returns Number of previous event nodes at current step in history for given key.
  */
-- (NSUInteger)countOfPrevStepsForKey:(NSString *)key;
+- (NSUInteger)countOfPrevStepsForKey:(NSString * _Nullable)key;
 
 /*!
  Get count of next event nodes at current step in history for given key.
  @param key History identifier string
  @returns Number of next event nodes at current step in history for given key.
  */
-- (NSUInteger)countOfNextStepsForKey:(NSString *)key;
+- (NSUInteger)countOfNextStepsForKey:(NSString * _Nullable)key;
 
 /*!
  Do step action of history for given key.
@@ -58,41 +58,41 @@ typedef void(^P9HistoryManagerAction)(NSDictionary *);
  @param redoAction Block code for redo action.
  @returns Result of add step action succeed.
  */
-- (BOOL)stepForKey:(NSString *)key stepName:(NSString *)stepName parameters:(NSDictionary *)parameters undoAction:(P9HistoryManagerAction)undoAction redoAction:(P9HistoryManagerAction)redoAction;
+- (BOOL)stepForKey:(NSString * _Nullable)key stepName:(NSString * _Nullable)stepName parameters:(NSDictionary * _Nullable)parameters undoAction:(P9HistoryManagerAction _Nullable)undoAction redoAction:(P9HistoryManagerAction _Nullable)redoAction;
 
 /*!
  Get previous step name of history for given key.
  @param key History identifier string
  @returns Name of step.
  */
-- (NSString *)peekPrevStepNameForKey:(NSString *)key;
+- (NSString * _Nullable)peekPrevStepNameForKey:(NSString * _Nullable)key;
 
 /*!
  Get next step name of history for given key.
  @param key History identifier string
  @returns Name of step.
  */
-- (NSString *)peekNextStepNameForKey:(NSString *)key;
+- (NSString * _Nullable)peekNextStepNameForKey:(NSString * _Nullable)key;
 
 /*!
  Do undo action of history for given key.
  @param key History identifier string
  @returns Result of undo action succeed.
  */
-- (BOOL)undoStepForKey:(NSString *)key;
+- (BOOL)undoStepForKey:(NSString * _Nullable)key;
 
 /*!
  Do redo action of history for given key.
  @param key History identifier string
  @returns Result of redo action succeed.
  */
-- (BOOL)redoStepForKey:(NSString *)key;
+- (BOOL)redoStepForKey:(NSString * _Nullable)key;
 
 /*!
  Clear all steps in history for given key.
  @param key History identifier string
  */
-- (void)clearAllStepsForKey:(NSString *)key;
+- (void)clearAllStepsForKey:(NSString * _Nullable)key;
 
 /*!
  Clear all steps of all history.

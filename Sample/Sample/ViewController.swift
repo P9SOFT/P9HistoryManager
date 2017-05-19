@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         
         self.updateButtonStatus()
         
-        P9ViewDragger.defaultTracker().trackingView(self.kingghidorahImageView, parameters: nil, ready: { (trackingView:UIView?) in
+        P9ViewDragger.default().trackingView(self.kingghidorahImageView, parameters: nil, ready: { (trackingView:UIView?) in
             self.temporaryTransform = self.kingghidorahImageView.layer.transform
         }, trackingHandler: nil) { (trackingView:UIView?) in
             let previousTransfrom:CATransform3D = self.temporaryTransform
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
             self.updateButtonStatus()
         }
         
-        P9ViewDragger.defaultTracker().trackingView(self.godzillaImageView, parameters: nil, ready: { (trackingView:UIView?) in
+        P9ViewDragger.default().trackingView(self.godzillaImageView, parameters: nil, ready: { (trackingView:UIView?) in
             self.temporaryTransform = self.godzillaImageView.layer.transform
         }, trackingHandler: nil) { (trackingView:UIView?) in
             let previousTransfrom:CATransform3D = self.temporaryTransform
